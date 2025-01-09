@@ -1,51 +1,48 @@
 import pytest
-import responses
-from your_module import fetch_articles  # Замените на ваше имя модуля
+from curses_modul import test_modul
 
-@pytest.fixture
-def mock_habr_response():
-    # Замокируем ответ от Habr
-    responses.add(responses.GET, 'https://habr.com/ru/articles/',
-                  body='<html><body><article>'
-                       '<h2><a href="https://habr.com/ru/post/1/">Статья про дизайн</a></h2>'
-                       '<time title="2023-01-01T00:00:00Z"></time>'
-                       '<div class="post-preview__text">Краткое описание статьи.</div>'
-                       '</article>'
-                       '<article>'
-                       '<h2><a href="https://habr.com/ru/post/2/">Статья про что-то другое</a></h2>'
-                       '<time title="2023-01-02T00:00:00Z"></time>'
-                       '<div class="post-preview__text">Краткое описание другой статьи.</div>'
-                       '</article>'
-                       '</body></html>',
-                  status=200)
+courses = [
+    "Python-разработчик с нуля",
+    "Java-разработчик с нуля",
+    "Fullstack-разработчик на Python",
+    "Frontend-разработчик с нуля"
+]
 
-@pytest.mark.usefixtures("mock_habr_response")
-def test_fetch_articles_success():
-    expected = [
-        ('2023-01-01T00:00:00Z', 'Статья про дизайн', 'https://habr.com/ru/post/1/')
-    ]
-    articles = fetch_articles('https://habr.com/ru/articles/')
-    assert articles == expected
+mentors = [
+    ["Евгений Шмаргунов", "Олег Булыгин", "Дмитрий Демидов", "Кирилл Табельский", 
+     "Александр Ульянцев", "Александр Бардин", "Александр Иванов", "Антон Солонилин", 
+     "Максим Филипенко", "Елена Никитина", "Азамат Искаков", "Роман Гордиенко"],
+    ["Филипп Воронов", "Анна Юшина", "Иван Бочаров", "Анатолий Корсаков", 
+     "Юрий Пеньков", "Илья Сухачев", "Иван Маркитан", "Ринат Бибиков", 
+     "Вадим Ерошевичев", "Тимур Сейсембаев", "Максим Батырев", "Никита Шумский", 
+     "Алексей Степанов", "Денис Коротков", "Антон Глушков", 
+     "Сергей Индюков", "Максим Воронцов", "Евгений Грязнов", 
+     "Константин Виролайнен", "Сергей Сердюк", "Павел Дерендяев"],
+    ["Евгений Шмаргунов", "Олег Булыгин", "Александр Бардин", 
+     "Александр Иванов", "Кирилл Табельский", "Александр Ульянцев", 
+     "Роман Гордиенко", "Адилет Асканжоев", "Александр Шлейко", 
+     "Алена Батицкая", "Денис Ежков", "Владимир Чебукин", 
+     "Эдгар Нуруллин", "Евгений Шек", "Максим Филипенко", 
+     "Елена Никитина"],
+    ["Владимир Чебукин", "Эдгар Нуруллин", "Евгений Шек", 
+     "Валерий Хаслер", "Татьяна Тен", "Александр Фитискин", 
+     "Александр Шлейко", "Алена Батицкая", 
+     "Александр Беспоясов", "Денис Ежков", 
+     "Николай Лопин", "Михаил Ларченко"]
+]
 
-def test_fetch_articles_no_keywords():
-    # Тест для случая, когда нет подходящих статей
-    html_content = (
-        '<html><body><article>'
-        '<h2><a href="https://habr.com/ru/post/2/">Статья про что-то другое</a></h2>'
-        '<time title="2023-01-02T00:00:00Z"></time>'
-        '<div class="post-preview__text">Краткое описание другой статьи.</div>'
-        '</article></body></html>'
-    )
-    
-    with responses.RequestsMock() as rsps:
-        rsps.add(responses.GET, 'https://habr.com/ru/articles/', body=html_content, status=200)
-        articles = fetch_articles('https://habr.com/ru/articles/')
-        assert articles == []
-
-def test_fetch_articles_error():
-    # Тест для обработки ошибки при запросе
-    with responses.RequestsMock() as rsps:
-        rsps.add(responses.GET, 'https://habr.com/ru/articles/', body=requests.exceptions.ConnectionError(), status=500)
-        
-        with pytest.raises(RuntimeError, match="Ошибка при получении статей"):
-            fetch_articles('https://habr.com/ru/articles/')
+@pytest.mark.parametrize("expected_output", [
+    ["Азамат", "Анна", "Антон", "Александр", 
+     "Денис", "Дмитрий", 
+     "Евгений", "Елена", 
+     "Иван", "Илья", 
+     "Кирилл", "Константин",
+     "Максим", "Николай",
+     "Олег", "Роман",
+     "Сергей", "Татьяна",
+     "Юрий", 
+     "Эдгар"]
+])
+def test_get_unique_mentors_names(expected_output):
+    result = get_unique_mentors_names(courses, mentors)
+    assert sorted(result) == sorted(expected_output)
