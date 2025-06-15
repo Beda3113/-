@@ -6,22 +6,23 @@
 
 ### Основные директории
 
-backend/
-├── api/ # API endpoints
-├── models/ # AI модели
-│ ├── cgan.py # Conditional GAN
-│ ├── esrgan.py # Real-ESRGAN
-│ └── diffusion.py # Stable Diffusion
-├── utils/ # Вспомогательные утилиты
-└── main.py # Точка входа FastAPI
-
-frontend/
-└── app.py # Streamlit интерфейс
-
-data/ # Датасеты и примеры
-weights/ # Веса моделей
-lora/ # Пользовательские стили
-output/ # Результаты генерации
+logo-generator/
+├── backend/ # Серверная часть
+│ ├── api/ # API endpoints
+│ ├── models/ # Модели ИИ
+│ │ ├── cgan.py # Conditional GAN
+│ │ ├── esrgan.py # Real-ESRGAN
+│ │ └── diffusion.py # Stable Diffusion
+│ ├── utils/ # Вспомогательные утилиты
+│ └── main.py # Точка входа FastAPI
+│
+├── frontend/ # Клиентская часть
+│ └── app.py # Streamlit интерфейс
+│
+├── data/ # Датасеты и примеры
+├── weights/ # Веса моделей
+├── lora/ # Пользовательские стили
+└── output/ # Результаты генерации
 
 
 
